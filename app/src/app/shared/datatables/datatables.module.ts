@@ -1,7 +1,7 @@
 // Librerías.
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe, DecimalPipe, PercentPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,6 +21,12 @@ import { DataTableComponent } from './components/datatable.component';
     ],
     exports: [
         DataTableComponent
+    ],
+    providers: [
+        CurrencyPipe,
+        DatePipe,
+        DecimalPipe,
+        PercentPipe
     ]
 })
 
