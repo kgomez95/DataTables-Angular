@@ -21,7 +21,7 @@ export class HomeDtService implements DataTableService {
                 { code: 'description', type: 'string', value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry´s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.' },
                 { code: 'salary', type: 'currency', value: (Math.floor(Math.random() * (300000 - 100) + 100) / 100) },
                 { code: 'decimal', type: 'decimal', value: (Math.floor(Math.random() * (10000000 - 100) + 100) / 100) },
-                
+
                 // NOTE: El porcentaje tiene que ser un número entre 0 y 1.
                 { code: 'percentage', type: 'percentage', value: (Math.floor(Math.random() * (10000 - 10) + 10) / 10000) },
 
@@ -52,7 +52,27 @@ export class HomeDtService implements DataTableService {
      * @description Llama al servicio correspondiente para recuperar los datos que se mostrarán en la tabla.
      * @returns Retorna los datos para mostrar en la tabla.
      */
-    public recoverData(filters: any): any {
+    public recoverData(filters: any, sort: any): any[] {
+        if (sort && sort.field) {
+            // NOTE: Pequeña chapuza para simular que hacemos la llamada a un servicio y poder coger los valores ordenados.
+            return this.records.sort(function (a: any, b: any) {
+                let aElement = undefined;
+                let bElement = undefined;
+
+                aElement = a.find((x: any) => x.code === sort.field);
+                bElement = b.find((x: any) => x.code === sort.field);
+
+                if (aElement.value > bElement.value) {
+                    return (sort.asc === true) ? 1 : -1;
+                }
+                else if (aElement.value < bElement.value) {
+                    return (sort.asc === true) ? -1 : 1;
+                }
+                else {
+                    return 0;
+                }
+            });
+        }
         return this.records;
     }
 
@@ -61,15 +81,15 @@ export class HomeDtService implements DataTableService {
      * @description Recupera las cabeceras que se mostrarán en la tabla.
      * @returns Retorna las cabecerás para mostrar en la tabla.
      */
-    public recoverDataHeaders(): string[] {
+    public recoverDataHeaders(): any[] {
         return [
-            '#',
-            'Nombre',
-            'Descripción',
-            'Salario',
-            'Decimal',
-            'Porcentaje',
-            'Fecha de creación'
+            { code: 'id', value: '#' },
+            { code: 'name', value: 'Nombre' },
+            { code: 'description', value: 'Descripción' },
+            { code: 'salary', value: 'Salario' },
+            { code: 'decimal', value: 'Decimal' },
+            { code: 'percentage', value: 'Porcentaje' },
+            { code: 'created_at', value: 'Fecha de creación' }
         ];
     }
 
@@ -79,7 +99,10 @@ export class HomeDtService implements DataTableService {
      * @returns Retorna los filtros para mostrar en la tabla.
      */
     public recoverFilters(): any {
-        throw new Error('Method not implemented.');
+        return {
+            basic: [],
+            advanced: []
+        };
     }
 
     /**

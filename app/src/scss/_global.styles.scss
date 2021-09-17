@@ -1,0 +1,37 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+
+// ====================================================================================== //
+// === DATA TABLES ====================================================================== //
+// ====================================================================================== //
+.dt-th {
+    display: flex;
+}
+.dt-th > span {
+    width: 100%;
+}
+
+.dt-sort {
+    display: flex;
+    //width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+}
+.dt-sort::before {
+    right: 1em;
+    content: "↑";
+    opacity: 0.3;
+}
+.dt-sort::after {
+    right: 0.5em;
+    content: "↓";
+    opacity: 0.3;
+}
+
+.dt-sort-asc::before {
+    opacity: 1;
+}
+.dt-sort-desc::after {
+    opacity: 1;
+}

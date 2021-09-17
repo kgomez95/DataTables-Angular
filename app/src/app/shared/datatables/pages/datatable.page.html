@@ -2,8 +2,13 @@
     <table class="table">
         <thead class="thead-light">
             <tr>
-                <th *ngFor="let header of headers">
-                    {{ header }}
+                <th class="cursor-pointer" *ngFor="let header of headers" (click)="sort(header.code)">
+                    <div class="dt-th">
+                        <span>{{ header.value }}</span>
+                        <div class="dt-sort"
+                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc === true && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc === true && sortRecord.field === header.code }">
+                        </div>
+                    </div>
                 </th>
             </tr>
         </thead>
@@ -16,8 +21,13 @@
         </tbody>
         <tfoot class="thead-light">
             <tr>
-                <th *ngFor="let header of headers">
-                    {{ header }}
+                <th class="cursor-pointer" *ngFor="let header of headers" (click)="sort(header.code)">
+                    <div class="dt-th">
+                        <span>{{ header.value }}</span>
+                        <div class="dt-sort"
+                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc === true && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc === true && sortRecord.field === header.code }">
+                        </div>
+                    </div>
                 </th>
             </tr>
         </tfoot>

@@ -12,8 +12,13 @@ import { DataTableService } from '../services/datatable.service';
 export class DataTableComponent implements OnInit {
 
     @Input() service?: DataTableService;
-    public headers: string[] = [];
-    public records: any = [];
+    public headers: any[] = [];
+    public records: any[] = [];
+    public sortRecord: any = {
+        field: '',
+        asc: true,
+        desc: false
+    };
 
     constructor(
         private currencyPipe: CurrencyPipe,
@@ -46,12 +51,31 @@ export class DataTableComponent implements OnInit {
      */
     public recoverData(): void {
         if (this.service) {
-            this.records = this.service.recoverData({});
+            this.records = this.service.recoverData({}, this.sortRecord);
             console.log(this.records);
         }
         else {
             console.error('[recoverData] no se puede recuperar los datos, porque no hay servicio.');
         }
+    }
+
+    /**
+     * @name sort
+     * @description Guarda la ordenación que seleccione el usuario en la tabla.
+     * @param field {string}: Campo de la cabecera a ordenar.
+     */
+    public sort(field: string): void {
+        if (this.sortRecord.field === field) {
+            this.sortRecord.asc = !this.sortRecord.asc;
+            this.sortRecord.desc = !this.sortRecord.desc;
+        }
+        else {
+            this.sortRecord.field = field;
+            this.sortRecord.asc = true;
+            this.sortRecord.desc = false;
+        }
+
+        this.recoverData();
     }
 
     /**
@@ -70,7 +94,8 @@ export class DataTableComponent implements OnInit {
                 case 'decimal':
                     return this.decimalPipe.transform(record.value, '1.2-2', 'es');
                 case 'currency':
-                    return this.currencyPipe.transform(record.value, 'EUR', true, '1.2-2', 'es');
+                    // NOTE: Para que no salgan advertencias en la consola se ha cambiado el tercer parámetro, poniendo un "undefined" en vez de "true".
+                    return this.currencyPipe.transform(record.value, 'EUR', undefined, '1.2-2', 'es');
                 case 'percentage':
                     return this.percentPipe.transform(record.value, '1.2-2', 'es');
                 case 'datetime':
