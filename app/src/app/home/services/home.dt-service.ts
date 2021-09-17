@@ -8,28 +8,44 @@ import { DataTableService } from '@shared/datatables/services/datatable.service'
 @Injectable()
 export class HomeDtService implements DataTableService {
 
-    constructor() { }
+    private records: any = [];
 
-    private records: any = [
-        [
-            { code: 'id', type: 'integer', value: 1 },
-            { code: 'name', type: 'string', value: 'Nombre 1' },
-            { code: 'description', type: 'string', value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry´s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.' },
-            { code: 'salary', type: 'currency', value: 6669.69 },
-            { code: 'decimal', type: 'decimal', value: 10000.55 },
-            { code: 'percentage', type: 'percentage', value: 0.56 },
-            { code: 'created_at', type: 'datetime', value: '2021-09-16T15:36:33.000Z' }
-        ],
-        [
-            { code: 'id', type: 'integer', value: 2 },
-            { code: 'name', type: 'string', value: 'Nombre 2' },
-            { code: 'description', type: 'string', value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry´s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.' },
-            { code: 'salary', type: 'currency', value: 669.1 },
-            { code: 'decimal', type: 'decimal', value: 0.55 },
-            { code: 'percentage', type: 'percentage', value: 0.5617 },
-            { code: 'created_at', type: 'datetime', value: '2021-09-15T23:00:00.000Z' }
-        ]
-    ];
+    constructor() {
+
+        // NOTE: Los tipos de campos tendrían que estar en una clase de constantes (ahora están puestos directamente para probar).
+
+        for (let i = 1; i <= 10; i++) {
+            this.records.push([
+                { code: 'id', type: 'integer', value: i },
+                { code: 'name', type: 'string', value: `Nombre ${i}` },
+                { code: 'description', type: 'string', value: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry´s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.' },
+                { code: 'salary', type: 'currency', value: (Math.floor(Math.random() * (300000 - 100) + 100) / 100) },
+                { code: 'decimal', type: 'decimal', value: (Math.floor(Math.random() * (10000000 - 100) + 100) / 100) },
+                
+                // NOTE: El porcentaje tiene que ser un número entre 0 y 1.
+                { code: 'percentage', type: 'percentage', value: (Math.floor(Math.random() * (10000 - 10) + 10) / 10000) },
+
+                // NOTE: La fecha que recibamos desde el servidor estará en UTC.
+                { code: 'created_at', type: 'datetime', value: this.randomDate(new Date('2000-01-01'), new Date(), 0, 23) }
+            ]);
+        }
+    }
+
+    /**
+     * @name randomDate
+     * @description Función para generar fecha aleatoria (su única función en este caso es generar los datos de prueba).
+     * @param start - Fecha de inicio de rango.
+     * @param end - Fecha de fin de rango.
+     * @param startHour - Hora de inicio de rango (entre 0 y 23).
+     * @param endHour - Hora de fin de rango (entre 0 y 23).
+     * @returns Retorna una fecha generada aleatoriamente.
+     */
+    private randomDate(start: any, end: any, startHour: any, endHour: any): Date {
+        var date = new Date(+start + Math.random() * (end - start));
+        var hour = startHour + Math.random() * (endHour - startHour) | 0;
+        date.setHours(hour);
+        return date;
+    }
 
     /**
      * @name recoverData
