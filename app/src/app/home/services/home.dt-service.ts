@@ -52,10 +52,31 @@ export class HomeDtService implements DataTableService {
      * @description Llama al servicio correspondiente para recuperar los datos que se mostrarán en la tabla.
      * @returns Retorna los datos para mostrar en la tabla.
      */
-    public recoverData(filters: any, sort: any): any[] {
+    public recoverData(basicFilter: string, advancedFilters: any, sort: any): any[] {
+        let result: any[] = [];
+        let aux: any[] = [];
+
+        this.records.forEach((record: any) => {
+            result.push(record);
+        });
+
+        if (basicFilter) {
+            // NOTE: Pequeña chapuza para simular que hacemos la llamada a un servicio para realizar un filtro básico.
+            result.forEach((record: any) => {
+                let id = record.find((x: any) => x.code === 'id');
+                let name = record.find((x: any) => x.code === 'name');
+                let description = record.find((x: any) => x.code === 'description');
+
+                if (id.value == basicFilter || name.value.indexOf(basicFilter) > -1 || description.value.indexOf(basicFilter) > -1) {
+                    aux.push(record);
+                }
+            });
+            result = aux;
+        }
+
         if (sort && sort.field) {
             // NOTE: Pequeña chapuza para simular que hacemos la llamada a un servicio y poder coger los valores ordenados.
-            return this.records.sort(function (a: any, b: any) {
+            return result.sort(function (a: any, b: any) {
                 let aElement = undefined;
                 let bElement = undefined;
 
@@ -73,7 +94,7 @@ export class HomeDtService implements DataTableService {
                 }
             });
         }
-        return this.records;
+        return result;
     }
 
     /**
@@ -100,7 +121,11 @@ export class HomeDtService implements DataTableService {
      */
     public recoverFilters(): any {
         return {
-            basic: [],
+            basic: [
+                { code: 'id', name: 'Identificador' },
+                { code: 'name', name: 'Nombre' },
+                { code: 'description', name: 'Descripción' }
+            ],
             advanced: []
         };
     }

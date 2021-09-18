@@ -1,4 +1,29 @@
 <div>
+    <div class="row"
+        *ngIf="filters && ((filters.basic && filters.basic.length > 0) || (filters.advanced && filters.advanced.length > 0))">
+        <div class="container input-group col-12 mb-2">
+            <input type="text" class="form-control" [placeholder]="basicNameFilters" [(ngModel)]="basicFilter"
+                *ngIf="filters.basic && filters.basic.length > 0">
+
+            <div class="filters-buttons">
+                <!-- Botón de buscar. -->
+                <button class="btn btn-primary ml-1" (click)="recoverData()">
+                    <i class="fas fa-search"></i>
+                </button>
+                <!-- Botón para mostrar/ocultar los filtros avanzados. -->
+                <button class="btn btn-info ml-1"
+                    *ngIf=" filters && filters.advanced && filters.advanced.length> 0"
+                    (click)="showAdvancedFilters = !showAdvancedFilters">
+                    <i class="fas fa-search-plus"
+                        [ngClass]="{ 'fa-search-plus': !showAdvancedFilters, 'fa-search-minus': showAdvancedFilters }"></i>
+                </button>
+                <!-- Botón para limpiar o inicializar los filtros. -->
+                <button class="btn btn-danger ml-1" (click)="clearFilters()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
     <table class="table">
         <thead class="thead-light">
             <tr>
@@ -6,7 +31,7 @@
                     <div class="dt-th">
                         <span>{{ header.value }}</span>
                         <div class="dt-sort"
-                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc === true && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc === true && sortRecord.field === header.code }">
+                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc && sortRecord.field === header.code }">
                         </div>
                     </div>
                 </th>
@@ -25,7 +50,7 @@
                     <div class="dt-th">
                         <span>{{ header.value }}</span>
                         <div class="dt-sort"
-                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc === true && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc === true && sortRecord.field === header.code }">
+                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc && sortRecord.field === header.code }">
                         </div>
                     </div>
                 </th>

@@ -12,13 +12,19 @@ import { DataTableService } from '../services/datatable.service';
 export class DataTableComponent implements OnInit {
 
     @Input() service?: DataTableService;
+
     public headers: any[] = [];
     public records: any[] = [];
+    public filters: any = {};
+
     public sortRecord: any = {
         field: '',
         asc: true,
         desc: false
     };
+    public basicNameFilters: string = '';
+    public basicFilter: string = '';
+    public showAdvancedFilters: boolean = false;
 
     constructor(
         private currencyPipe: CurrencyPipe,
@@ -29,6 +35,7 @@ export class DataTableComponent implements OnInit {
 
     ngOnInit(): void {
         this.recoverHeaders();
+        this.recoverFilters();
         this.recoverData();
     }
 
@@ -41,7 +48,7 @@ export class DataTableComponent implements OnInit {
             this.headers = this.service.recoverDataHeaders();
         }
         else {
-            console.error('[recoverData] no se puede recuperar los datos, porque no hay servicio.');
+            console.error('[recoverHeaders] no se puede recuperar las cabeceras, porque no hay servicio.');
         }
     }
 
@@ -51,11 +58,27 @@ export class DataTableComponent implements OnInit {
      */
     public recoverData(): void {
         if (this.service) {
-            this.records = this.service.recoverData({}, this.sortRecord);
+            this.records = this.service.recoverData(this.basicFilter, {}, this.sortRecord);
             console.log(this.records);
         }
         else {
             console.error('[recoverData] no se puede recuperar los datos, porque no hay servicio.');
+        }
+    }
+
+    /**
+     * @name recoverFilters
+     * @description Recupera los filtros que se mostrarán en la tabla.
+     */
+    public recoverFilters(): void {
+        if (this.service) {
+            this.filters = this.service.recoverFilters();
+
+            // NOTE: Una vez recuperados los filtros contruimos el placeholder para los filtros básicos.
+            this.buildBasicFilters();
+        }
+        else {
+            console.error('[recoverFilters] no se puede recuperar los filtros, porque no hay servicio.');
         }
     }
 
@@ -76,6 +99,16 @@ export class DataTableComponent implements OnInit {
         }
 
         this.recoverData();
+    }
+
+    /**
+     * @name clearFilters
+     * @description Inicializa los filtros a su estado original.
+     */
+    public clearFilters(): void {
+        this.basicFilter = '';
+
+        // TODO: Inicializar los filtros avanzados a su estado original.
     }
 
     /**
@@ -105,6 +138,20 @@ export class DataTableComponent implements OnInit {
             }
         }
         else return '';
+    }
+
+    /**
+     * @name buildBasicFilters
+     * @description Construye el apartado de filtros básicos.
+     */
+    private buildBasicFilters(): void {
+        let bf = [];
+
+        for (let i = 0; i < this.filters.basic.length; i++) {
+            bf.push(this.filters.basic[i].name);
+        }
+
+        this.basicNameFilters = bf.join(', ');
     }
 
 }
