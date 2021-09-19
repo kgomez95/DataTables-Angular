@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, CurrencyPipe, DatePipe, DecimalPipe, PercentPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 // Importaciones de datatables.
 import { DataTableComponent } from './components/datatable.component';
@@ -14,7 +15,8 @@ import { DataTableComponent } from './components/datatable.component';
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
-        NgbCollapseModule
+        NgbCollapseModule,
+        CurrencyMaskModule
     ],
     declarations: [
         DataTableComponent

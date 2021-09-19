@@ -74,6 +74,33 @@ export class HomeDtService implements DataTableService {
             result = aux;
         }
 
+        // NOTE: Gran chapuza para simular que hacemos la llamada a un servicio para realizar los filtros avanzados.
+        if (advancedFilters && advancedFilters.length > 0) {
+            aux = [];
+            let update: boolean = false;
+
+            advancedFilters.forEach((filter: any) => {
+                let record: any;
+
+                if (filter.value != filter.defaultValue || (filter.from != filter.defaultFrom && filter.to != filter.defaultTo) || (filter.from !== filter.defaultFrom && filter.to !== filter.defaultTo)) {
+                    update = true;
+
+                    if (filter.isRange) {
+                        record = result.filter((x: any) => x.find((y: any) => y.code === filter.code && y.value >= filter.from && y.value <= filter.to));
+                        record.forEach((element: any) => {
+                            aux.push(element);
+                        });
+                    }
+                    else {
+                        record = result.find((x: any) => x.find((y: any) => y.code === filter.code && y.value == filter.value));
+                        aux.push(record);
+                    }
+                }
+            });
+
+            if (update) result = aux;
+        }
+
         if (sort && sort.field) {
             // NOTE: Pequeña chapuza para simular que hacemos la llamada a un servicio y poder coger los valores ordenados.
             return result.sort(function (a: any, b: any) {
@@ -126,7 +153,56 @@ export class HomeDtService implements DataTableService {
                 { code: 'name', name: 'Nombre' },
                 { code: 'description', name: 'Descripción' }
             ],
-            advanced: []
+            advanced: [
+                {
+                    code: 'salary',
+                    name: 'Salario',
+                    type: 'currency',
+                    value: '',
+                    from: '', //2021-02-02
+                    to: '',  //2021-02-03
+                    isRange: false,
+                    defaultValue: '',
+                    defaultFrom: '',
+                    defaultTo: ''
+                },
+                {
+                    code: 'decimal',
+                    name: 'Decimal',
+                    type: 'decimal',
+                    value: '',
+                    from: '', //2021-02-02
+                    to: '',  //2021-02-03
+                    isRange: false,
+                    defaultValue: '',
+                    defaultFrom: '',
+                    defaultTo: ''
+                },
+                {
+                    code: 'decimal',
+                    name: 'Rango de decimal',
+                    type: 'decimal',
+                    value: '',
+                    from: '', //2021-02-02
+                    to: '',  //2021-02-03
+                    isRange: true,
+                    defaultValue: '',
+                    defaultFrom: '',
+                    defaultTo: ''
+                },
+                {
+                    code: 'salary',
+                    name: 'Rango de salario',
+                    type: 'currency',
+                    value: '',
+                    from: '', //2021-02-02
+                    to: '',  //2021-02-03
+                    isRange: true,
+                    defaultValue: '',
+                    defaultFrom: '',
+                    defaultTo: ''
+                }
+            ]
         };
     }
 

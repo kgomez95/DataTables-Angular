@@ -58,7 +58,8 @@ export class DataTableComponent implements OnInit {
      */
     public recoverData(): void {
         if (this.service) {
-            this.records = this.service.recoverData(this.basicFilter, {}, this.sortRecord);
+            console.log(this.filters);
+            this.records = this.service.recoverData(this.basicFilter, this.filters.advanced, this.sortRecord);
             console.log(this.records);
         }
         else {
@@ -107,8 +108,11 @@ export class DataTableComponent implements OnInit {
      */
     public clearFilters(): void {
         this.basicFilter = '';
-
-        // TODO: Inicializar los filtros avanzados a su estado original.
+        this.filters.advanced.forEach((filter: any) => {
+            filter.value = filter.defaultValue;
+            filter.from = filter.defaultFrom;
+            filter.to = filter.defaultTo;
+        });
     }
 
     /**
