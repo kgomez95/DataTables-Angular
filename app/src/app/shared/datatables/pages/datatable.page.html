@@ -81,6 +81,36 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Porcentaje -->
+                <div class="row mb-3" *ngIf="filter.type === 'percentage'">
+                    <!-- Sin rango. -->
+                    <div class="col-12" *ngIf="!filter.isRange">
+                        <label [for]="'datatable_adf_' + ind" class="form-label">{{ filter.name }}</label>
+                        <input [id]="'datatable_adf_' + ind" class="form-control" type="text" [(ngModel)]="filter.value"
+                            [placeholder]="filter.name" currencyMask
+                            [options]="{ prefix: '', suffix: '', precision: 4 }">
+                    </div>
+                    <!-- Con rango. -->
+                    <div class="col-12" *ngIf="filter.isRange">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <label [for]="'datatable_adf_' + ind" class="form-label">{{ filter.name }}
+                                    (desde)</label>
+                                <input [id]="'datatable_adf_' + ind" class="form-control" type="text"
+                                    [(ngModel)]="filter.from" [placeholder]="filter.name" currencyMask
+                                    [options]="{ prefix: '', suffix: '', precision: 4 }">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label [for]="'datatable_adf_' + ind" class="form-label">{{ filter.name }}
+                                    (hasta)</label>
+                                <input [id]="'datatable_adf_' + ind" class="form-control" type="text"
+                                    [(ngModel)]="filter.to" [placeholder]="filter.name" currencyMask
+                                    [options]="{ prefix: '', suffix: '', precision: 4 }">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

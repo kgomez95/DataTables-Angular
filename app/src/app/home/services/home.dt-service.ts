@@ -201,6 +201,30 @@ export class HomeDtService implements DataTableService {
                     defaultValue: '',
                     defaultFrom: '',
                     defaultTo: ''
+                },
+                {
+                    code: 'percentage',
+                    name: 'Porcentaje',
+                    type: 'percentage',
+                    value: '',
+                    from: '', //2021-02-02
+                    to: '',  //2021-02-03
+                    isRange: false,
+                    defaultValue: '',
+                    defaultFrom: '',
+                    defaultTo: ''
+                },
+                {
+                    code: 'percentage',
+                    name: 'Rango de porcentaje',
+                    type: 'percentage',
+                    value: '',
+                    from: '', //2021-02-02
+                    to: '',  //2021-02-03
+                    isRange: true,
+                    defaultValue: '',
+                    defaultFrom: '',
+                    defaultTo: ''
                 }
             ]
         };
