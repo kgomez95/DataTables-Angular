@@ -86,13 +86,13 @@ export class HomeDtService implements DataTableService {
                     update = true;
 
                     if (filter.isRange) {
-                        record = result.filter((x: any) => x.find((y: any) => y.code === filter.code && y.value >= filter.from && y.value <= filter.to));
+                        record = result.filter((x: any) => x.find((y: any) => y.code === filter.code && ( (y.value >= filter.from && y.value <= filter.to) || (y.type === 'datetime' && y.value >= new Date(filter.from) && y.value <= new Date(filter.to)) )));
                         record.forEach((element: any) => {
                             aux.push(element);
                         });
                     }
                     else {
-                        record = result.find((x: any) => x.find((y: any) => y.code === filter.code && y.value == filter.value));
+                        record = result.find((x: any) => x.find((y: any) => y.code === filter.code && ( (y.value == filter.value) || (y.type === 'datetime' && y.value >= new Date(filter.value) && y.value.setDate(y.value.getDate() - 1) <= new Date(filter.value)) )));
                         aux.push(record);
                     }
                 }
@@ -218,6 +218,30 @@ export class HomeDtService implements DataTableService {
                     code: 'percentage',
                     name: 'Rango de porcentaje',
                     type: 'percentage',
+                    value: '',
+                    from: '', //2021-02-02
+                    to: '',  //2021-02-03
+                    isRange: true,
+                    defaultValue: '',
+                    defaultFrom: '',
+                    defaultTo: ''
+                },
+                {
+                    code: 'created_at',
+                    name: 'Fecha de creación',
+                    type: 'datetime',
+                    value: '',
+                    from: '', //2021-02-02
+                    to: '',  //2021-02-03
+                    isRange: false,
+                    defaultValue: '',
+                    defaultFrom: '',
+                    defaultTo: ''
+                },
+                {
+                    code: 'created_at',
+                    name: 'Fecha de creación',
+                    type: 'datetime',
                     value: '',
                     from: '', //2021-02-02
                     to: '',  //2021-02-03

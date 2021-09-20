@@ -111,6 +111,33 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Fecha y hora -->
+                <div class="row mb-3" *ngIf="filter.type === 'datetime'">
+                    <!-- Sin rango. -->
+                    <div class="col-12" *ngIf="!filter.isRange">
+                        <label [for]="'datatable_adf_' + ind" class="form-label">{{ filter.name }}</label>
+                        <input [id]="'datatable_adf_' + ind" class="form-control" type="date"
+                            [(ngModel)]="filter.value" [placeholder]="filter.name">
+                    </div>
+                    <!-- Con rango. -->
+                    <div class="col-12" *ngIf="filter.isRange">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <label [for]="'datatable_adf_' + ind" class="form-label">{{ filter.name }}
+                                    (desde)</label>
+                                <input [id]="'datatable_adf_' + ind" class="form-control" type="date"
+                                    [(ngModel)]="filter.from" [placeholder]="filter.name">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label [for]="'datatable_adf_' + ind" class="form-label">{{ filter.name }}
+                                    (hasta)</label>
+                                <input [id]="'datatable_adf_' + ind" class="form-control" type="date"
+                                    [(ngModel)]="filter.to" [placeholder]="filter.name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
