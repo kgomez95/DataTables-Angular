@@ -117,8 +117,8 @@
                     <!-- Sin rango. -->
                     <div class="col-12" *ngIf="!filter.isRange">
                         <label [for]="'datatable_adf_' + ind" class="form-label">{{ filter.name }}</label>
-                        <input [id]="'datatable_adf_' + ind" class="form-control" type="date"
-                            [(ngModel)]="filter.value" [placeholder]="filter.name">
+                        <input [id]="'datatable_adf_' + ind" class="form-control" type="date" [(ngModel)]="filter.value"
+                            [placeholder]="filter.name">
                     </div>
                     <!-- Con rango. -->
                     <div class="col-12" *ngIf="filter.isRange">
@@ -142,38 +142,96 @@
         </div>
     </div>
 
-    <!-- TABLA -->
-    <table class="table">
-        <thead class="thead-light">
-            <tr>
-                <th class="cursor-pointer" *ngFor="let header of headers" (click)="sort(header.code)">
-                    <div class="dt-th">
-                        <span>{{ header.value }}</span>
-                        <div class="dt-sort"
-                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc && sortRecord.field === header.code }">
+    <div class="table-responsive">
+        <!-- TABLA -->
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th class="cursor-pointer" *ngFor="let header of headers" (click)="sort(header.code)">
+                        <div class="dt-th">
+                            <span>{{ header.value }}</span>
+                            <div class="dt-sort"
+                                [ngClass]="{ 'dt-sort-asc': sortRecord.asc && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc && sortRecord.field === header.code }">
+                            </div>
                         </div>
-                    </div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let record of records">
-                <td *ngFor="let r of record | keyvalue">
-                    {{ getValue(r.value) }}
-                </td>
-            </tr>
-        </tbody>
-        <tfoot class="thead-light">
-            <tr>
-                <th class="cursor-pointer" *ngFor="let header of headers" (click)="sort(header.code)">
-                    <div class="dt-th">
-                        <span>{{ header.value }}</span>
-                        <div class="dt-sort"
-                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc && sortRecord.field === header.code }">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let record of records">
+                    <td *ngFor="let r of record | keyvalue">
+                        {{ getValue(r.value) }}
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot class="thead-light">
+                <tr>
+                    <th class="cursor-pointer" *ngFor="let header of headers" (click)="sort(header.code)">
+                        <div class="dt-th">
+                            <span>{{ header.value }}</span>
+                            <div class="dt-sort"
+                                [ngClass]="{ 'dt-sort-asc': sortRecord.asc && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc && sortRecord.field === header.code }">
+                            </div>
                         </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="form-inline row ai-baseline">
+            <div class="col-12 col-md-6">
+                <ul class="pagination">
+                    <!-- <li class="page-item">
+                        <button class="page-link" aria-label="Previous" (click)="selectPage(1)" [disabled]="page === 1">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </button>
+                    </li> -->
+                    <li class="page-item">
+                        <button class="page-link" aria-label="Previous" (click)="selectPage(page - 1)"
+                            [disabled]="page === 1">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </button>
+                    </li>
+                    <li class="page-item" *ngFor="let p of pagination" [ngClass]="{ 'active': p === page }">
+                        <button class="page-link" (click)="selectPage(p)">{{ p }}</button>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link" aria-label="Next" (click)="selectPage(page + 1)"
+                            [disabled]="page === totalPages">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </button>
+                    </li>
+                    <!-- <li class="page-item">
+                        <button class="page-link" aria-label="Next" (click)="selectPage(totalPages)"
+                            [disabled]="page === totalPages">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </button>
+                    </li> -->
+                </ul>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-inline justify-content-sm-end w-100 dt-pagination">
+                    <div>
+                        <select class="form-control dt-pagination-items mr-2" [(ngModel)]="items"
+                            (ngModelChange)="recoverData()">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                        <span class="mr-4">Items</span>
                     </div>
-                </th>
-            </tr>
-        </tfoot>
-    </table>
+                    <!--<div>
+                        <input class="form-control dt-pagination-page mr-2" type="number" [value]="page"
+                            (keydown)="checkPage($event)">
+                        <span>de {{ totalPages }}</span>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

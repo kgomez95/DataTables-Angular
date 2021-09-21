@@ -14,7 +14,7 @@ export class HomeDtService implements DataTableService {
 
         // NOTE: Los tipos de campos tendrían que estar en una clase de constantes (ahora están puestos directamente para probar).
 
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 1; i <= 100; i++) {
             this.records.push([
                 { code: 'id', type: 'integer', value: i },
                 { code: 'name', type: 'string', value: `Nombre ${i}` },
@@ -52,9 +52,11 @@ export class HomeDtService implements DataTableService {
      * @description Llama al servicio correspondiente para recuperar los datos que se mostrarán en la tabla.
      * @returns Retorna los datos para mostrar en la tabla.
      */
-    public recoverData(basicFilter: string, advancedFilters: any, sort: any): any[] {
+    public recoverData(basicFilter: string, advancedFilters: any, offset: number, limit: number, sort: any): any {
         let result: any[] = [];
         let aux: any[] = [];
+        let totalPages: number = 0;
+        let totalRecords: number = 0;
 
         this.records.forEach((record: any) => {
             result.push(record);
@@ -103,7 +105,7 @@ export class HomeDtService implements DataTableService {
 
         if (sort && sort.field) {
             // NOTE: Pequeña chapuza para simular que hacemos la llamada a un servicio y poder coger los valores ordenados.
-            return result.sort(function (a: any, b: any) {
+            result = result.sort(function (a: any, b: any) {
                 let aElement = undefined;
                 let bElement = undefined;
 
@@ -121,7 +123,18 @@ export class HomeDtService implements DataTableService {
                 }
             });
         }
-        return result;
+
+        // NOTE: Calculamos el total de páginas.
+        totalPages = Math.ceil(result.length / limit);
+
+        // NOTE: Cogemos la cantidad total de registros a mostrar.
+        totalRecords = result.length;
+
+        return {
+            data: result.slice(offset, offset + limit),
+            totalPages,
+            totalRecords
+        };
     }
 
     /**

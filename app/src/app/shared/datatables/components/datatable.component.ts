@@ -26,6 +26,12 @@ export class DataTableComponent implements OnInit {
     public basicFilter: string = '';
     public showAdvancedFilters: boolean = false;
 
+    public items: number = 0;
+    public page: number = 1;
+    public totalRecords: number = 0;
+    public totalPages: number = 1;
+    public pagination: number[] = [];
+
     constructor(
         private currencyPipe: CurrencyPipe,
         private datePipe: DatePipe,
@@ -34,6 +40,12 @@ export class DataTableComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.items = 5;
+        this.page = 1;
+        this.totalPages = 1;
+        this.totalRecords = 0;
+        this.pagination = [this.page];
+
         this.recoverHeaders();
         this.recoverFilters();
         this.recoverData();
@@ -58,9 +70,22 @@ export class DataTableComponent implements OnInit {
      */
     public recoverData(): void {
         if (this.service) {
+            this.isValidPagination();
+
+            // NOTE: Recuperamos los datos.
             console.log(this.filters);
-            this.records = this.service.recoverData(this.basicFilter, this.filters.advanced, this.sortRecord);
+            let response = this.service.recoverData(this.basicFilter, this.filters.advanced, (this.items * (this.page - 1)), parseInt(this.items.toString()), this.sortRecord);
+            this.records = response.data;
             console.log(this.records);
+
+            // NOTE: Calculamos el total de páginas
+            this.totalRecords = response.totalRecords;
+            this.totalPages = response.totalPages;
+            this.buildPagination();
+
+            if (!this.isValidPagination()) {
+                this.recoverData();
+            }
         }
         else {
             console.error('[recoverData] no se puede recuperar los datos, porque no hay servicio.');
@@ -145,6 +170,56 @@ export class DataTableComponent implements OnInit {
     }
 
     /**
+     * @name selectPage
+     * @description Selecciona la página que reciba por parámetro.
+     * @param page {number}: Número de página a seleccionar.
+     */
+    public selectPage(page: number): void {
+        this.page = page;
+        this.buildPagination();
+        this.recoverData();
+    }
+
+    /**
+     * @name buildPagination
+     * @description Construye la paginación para poder visualizarla en la página.
+     */
+    private buildPagination(): void {
+        let plusPages = this.page + 3;
+        let lessPages = this.page - 2;
+        let diff = 0;
+
+        this.pagination = [];
+
+        if (lessPages < 1) {
+            plusPages = plusPages + (1 - lessPages);
+            lessPages = 1;
+        }
+
+        if (plusPages > this.totalPages) {
+            diff = plusPages - this.totalPages;
+
+            if (lessPages > diff - 1) {
+                lessPages = lessPages - diff + 1;
+            }
+            else if (lessPages === diff - 1) {
+                lessPages = lessPages - diff + 2;
+            }
+
+            plusPages = this.totalPages + 1;
+        }
+
+        for (let i = lessPages; i < this.page; i++) {
+            this.pagination.push(i);
+        }
+
+        for (let i = this.page; i < plusPages; i++) {
+            this.pagination.push(i);
+        }
+    }
+
+
+    /**
      * @name buildBasicFilters
      * @description Construye el apartado de filtros básicos.
      */
@@ -156,6 +231,21 @@ export class DataTableComponent implements OnInit {
         }
 
         this.basicNameFilters = bf.join(', ');
+    }
+
+    /**
+     * @name isValidPagination
+     * @description Comprueba si la paginación es correcta o no.
+     */
+    private isValidPagination(): boolean {
+        // NOTE: En caso de que el usuario cambie la cantidad de registros a mostrar en pantalla tenemos que comprobar si la página actual
+        //       ya no se encontrará disponible después de recuperar los datos. Si es así entonces asignamos la última página.
+        let pageCheck = Math.ceil(this.totalRecords / this.items);
+        if (this.totalRecords > 0 && pageCheck < this.page) {
+            this.page = pageCheck;
+            return false;
+        }
+        else return true;
     }
 
 }

@@ -9,7 +9,7 @@ export abstract class DataTableService {
      * @description Llama al servicio correspondiente para recuperar los datos que se mostrarán en la tabla.
      * @returns Retorna los datos para mostrar en la tabla.
      */
-    public abstract recoverData(basicFilter: string, advancedFilters: any, sort: any): any[];
+    public abstract recoverData(basicFilter: string, advancedFilters: any, offset: number, limit: number, sort: any): any;
 
     /**
      * @name recoverDataHeaders
