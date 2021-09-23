@@ -1,6 +1,7 @@
 // Librerías.
 import { Component, Input, OnInit } from '@angular/core';
 import { CurrencyPipe, DatePipe, DecimalPipe, PercentPipe } from '@angular/common';
+import { UUID } from 'angular2-uuid';
 
 // Importaciones de datatables.
 import { DataTableService } from '../services/datatable.service';
@@ -31,6 +32,10 @@ export class DataTableComponent implements OnInit {
     public totalRecords: number = 0;
     public totalPages: number = 1;
     public pagination: number[] = [];
+
+    // NOTE: Este GUID es para asignarlo a los identificadores que se creen en el datatable.page.html, ya que este componente datatable puede estar
+    //       dos o más instancias a la vez en una misma pantalla. Por tanto, nos interesa que no haya identificadores repetidos.
+    public guid: string = '_' + UUID.UUID();
 
     constructor(
         private currencyPipe: CurrencyPipe,
