@@ -36,6 +36,14 @@
     opacity: 1;
 }
 
+.table-responsive {
+    overflow: hidden;
+}
+
+.table-responsive > .mobile {
+    display: none !important;
+}
+
 @media only screen and (max-width: 750px) {
     .basic-filter-container {
         justify-content: right;
@@ -47,5 +55,15 @@
         margin-top: 5px;
         display: flex;
         flex-direction: row-reverse;
+    }
+}
+
+@media only screen and (max-width: 950px) {
+    .table-responsive > .desktop {
+        display: none !important;
+    }
+
+    .table-responsive > .mobile {
+        display: table !important;
     }
 }

@@ -143,8 +143,8 @@
     </div>
 
     <div class="table-responsive">
-        <!-- TABLA -->
-        <table class="table">
+        <!-- Tabla para escritorio -->
+        <table class="table desktop">
             <thead class="thead-light">
                 <tr>
                     <th class="cursor-pointer" *ngFor="let header of headers" (click)="sort(header.code)">
@@ -176,6 +176,23 @@
                     </th>
                 </tr>
             </tfoot>
+        </table>
+
+        <!-- Tabla para móviles -->
+        <table class="table mobile" *ngFor="let record of records">
+            <tr *ngFor="let r of record | keyvalue; let ind = index">
+                <th class="table-secondary cursor-pointer" (click)="sort(headers[ind].code)">
+                    <div class="dt-th">
+                        <span>{{ headers[ind].value }}</span>
+                        <div class="dt-sort"
+                            [ngClass]="{ 'dt-sort-asc': sortRecord.asc && sortRecord.field === headers[ind].code, 'dt-sort-desc': sortRecord.desc && sortRecord.field === headers[ind].code }">
+                        </div>
+                    </div>
+                </th>
+                <td>
+                    {{ getValue(r.value) }}
+                </td>
+            </tr>
         </table>
 
         <div class="form-inline row ai-baseline">
