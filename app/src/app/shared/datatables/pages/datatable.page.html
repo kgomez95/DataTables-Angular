@@ -2,7 +2,7 @@
     <!-- FILTROS -->
     <div class="row"
         *ngIf="filters && ((filters.basic && filters.basic.length > 0) || (filters.advanced && filters.advanced.length > 0))">
-        <div class="container input-group col-12 mb-2">
+        <div class="container input-group col-12 mb-2 basic-filter-container">
             <input type="text" class="form-control" [placeholder]="basicNameFilters" [(ngModel)]="basicFilter"
                 *ngIf="filters.basic && filters.basic.length > 0">
 

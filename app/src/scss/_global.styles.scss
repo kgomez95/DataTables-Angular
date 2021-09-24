@@ -35,3 +35,17 @@
 .dt-sort-desc::after {
     opacity: 1;
 }
+
+@media only screen and (max-width: 750px) {
+    .basic-filter-container {
+        justify-content: right;
+    }
+    .basic-filter-container > input {
+        width: 100% !important;
+    }
+    .basic-filter-container > div {
+        margin-top: 5px;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+}
