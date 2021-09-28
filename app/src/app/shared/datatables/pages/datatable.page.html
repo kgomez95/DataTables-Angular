@@ -1,4 +1,8 @@
 <div>
+    <div class="d-flex mb-2 justify-content-end w-100" *ngIf="actions && actions.create">
+        <button class="btn btn-success mr-1" (click)="createRecord()">Crear</button>
+    </div>
+
     <!-- FILTROS -->
     <div class="row"
         *ngIf="filters && ((filters.basic && filters.basic.length > 0) || (filters.advanced && filters.advanced.length > 0))">
@@ -31,8 +35,8 @@
                     <!-- Sin rango. -->
                     <div class="col-12" *ngIf="!filter.isRange">
                         <label [for]="'datatable_adf_' + ind + guid" class="form-label">{{ filter.name }}</label>
-                        <input [id]="'datatable_adf_' + ind + guid" class="form-control" type="text" [(ngModel)]="filter.value"
-                            [placeholder]="filter.name" currencyMask>
+                        <input [id]="'datatable_adf_' + ind + guid" class="form-control" type="text"
+                            [(ngModel)]="filter.value" [placeholder]="filter.name" currencyMask>
                     </div>
                     <!-- Con rango. -->
                     <div class="col-12" *ngIf="filter.isRange">
@@ -58,8 +62,9 @@
                     <!-- Sin rango. -->
                     <div class="col-12" *ngIf="!filter.isRange">
                         <label [for]="'datatable_adf_' + ind + guid" class="form-label">{{ filter.name }}</label>
-                        <input [id]="'datatable_adf_' + ind + guid" class="form-control" type="text" [(ngModel)]="filter.value"
-                            [placeholder]="filter.name" currencyMask [options]="{ prefix: '', suffix: '' }">
+                        <input [id]="'datatable_adf_' + ind + guid" class="form-control" type="text"
+                            [(ngModel)]="filter.value" [placeholder]="filter.name" currencyMask
+                            [options]="{ prefix: '', suffix: '' }">
                     </div>
                     <!-- Con rango. -->
                     <div class="col-12" *ngIf="filter.isRange">
@@ -87,8 +92,8 @@
                     <!-- Sin rango. -->
                     <div class="col-12" *ngIf="!filter.isRange">
                         <label [for]="'datatable_adf_' + ind + guid" class="form-label">{{ filter.name }}</label>
-                        <input [id]="'datatable_adf_' + ind + guid" class="form-control" type="text" [(ngModel)]="filter.value"
-                            [placeholder]="filter.name" currencyMask
+                        <input [id]="'datatable_adf_' + ind + guid" class="form-control" type="text"
+                            [(ngModel)]="filter.value" [placeholder]="filter.name" currencyMask
                             [options]="{ prefix: '', suffix: '', precision: 4 }">
                     </div>
                     <!-- Con rango. -->
@@ -117,8 +122,8 @@
                     <!-- Sin rango. -->
                     <div class="col-12" *ngIf="!filter.isRange">
                         <label [for]="'datatable_adf_' + ind + guid" class="form-label">{{ filter.name }}</label>
-                        <input [id]="'datatable_adf_' + ind + guid" class="form-control" type="date" [(ngModel)]="filter.value"
-                            [placeholder]="filter.name">
+                        <input [id]="'datatable_adf_' + ind + guid" class="form-control" type="date"
+                            [(ngModel)]="filter.value" [placeholder]="filter.name">
                     </div>
                     <!-- Con rango. -->
                     <div class="col-12" *ngIf="filter.isRange">
@@ -155,12 +160,22 @@
                             </div>
                         </div>
                     </th>
+                    <th *ngIf="hasRecordActions()">
+                        <!-- Acciones -->
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let record of records">
                     <td *ngFor="let r of record | keyvalue">
                         {{ getValue(r.value) }}
+                    </td>
+                    <td *ngIf="hasRecordActions()">
+                        <button class="btn btn-info mr-1 mb-1" *ngIf="actions.view" (click)="openRecord(record)">Ver</button>
+                        <button class="btn btn-warning mr-1 mb-1" *ngIf="actions.update"
+                            (click)="updateRecord(record)">Editar</button>
+                        <button class="btn btn-danger mb-1" *ngIf="actions.delete"
+                            (click)="deleteRecord(record)">Eliminar</button>
                     </td>
                 </tr>
             </tbody>
@@ -173,6 +188,9 @@
                                 [ngClass]="{ 'dt-sort-asc': sortRecord.asc && sortRecord.field === header.code, 'dt-sort-desc': sortRecord.desc && sortRecord.field === header.code }">
                             </div>
                         </div>
+                    </th>
+                    <th *ngIf="hasRecordActions()">
+                        <!-- Acciones -->
                     </th>
                 </tr>
             </tfoot>
@@ -191,6 +209,18 @@
                 </th>
                 <td>
                     {{ getValue(r.value) }}
+                </td>
+            </tr>
+            <tr *ngIf="hasRecordActions()">
+                <th class="table-secondary cursor-pointer" *ngIf="hasRecordActions()">
+                    <!-- Acciones -->
+                </th>
+                <td>
+                    <button class="btn btn-info mr-1" *ngIf="actions.view" (click)="openRecord(record)">Ver</button>
+                    <button class="btn btn-warning mr-1" *ngIf="actions.update"
+                        (click)="updateRecord(record)">Editar</button>
+                    <button class="btn btn-danger" *ngIf="actions.delete"
+                        (click)="deleteRecord(record)">Eliminar</button>
                 </td>
             </tr>
         </table>

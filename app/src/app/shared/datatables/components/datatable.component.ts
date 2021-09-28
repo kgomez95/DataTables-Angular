@@ -17,6 +17,12 @@ export class DataTableComponent implements OnInit {
     public headers: any[] = [];
     public records: any[] = [];
     public filters: any = {};
+    public actions: any = {
+        create: false,
+        delete: false,
+        update: false,
+        view: false
+    };
 
     public sortRecord: any = {
         field: '',
@@ -80,7 +86,8 @@ export class DataTableComponent implements OnInit {
             // NOTE: Recuperamos los datos.
             console.log(this.filters);
             let response = this.service.recoverData(this.basicFilter, this.filters.advanced, (this.items * (this.page - 1)), parseInt(this.items.toString()), this.sortRecord);
-            this.records = response.data;
+            this.records = response.data.records;
+            this.actions = response.data.actions;
             console.log(this.records);
 
             // NOTE: Calculamos el total de páginas
@@ -183,6 +190,86 @@ export class DataTableComponent implements OnInit {
         this.page = page;
         this.buildPagination();
         this.recoverData();
+    }
+
+    /**
+     * @name hasRecordActions
+     * @description Comprueba si los registros de la tabla tienen disponibles acciones para realizar.
+     * @returns Retorna "true" si los registros tienen acciones o "false" en caso de que no tenga acciones.
+     */
+    public hasRecordActions(): boolean {
+        return (this.actions && (this.actions.delete || this.actions.update || this.actions.view));
+    }
+
+    /**
+     * @name createRecord
+     * @description Abre la pantalla para crear un registro.
+     */
+    public createRecord(): void {
+        if (this.service) {
+            this.service.createRecord();
+        }
+        else {
+            console.error('[createRecord] no se puede crear un nuevo registro, porque no hay servicio.');
+        }
+    }
+
+    /**
+     * @name openRecord
+     * @description Abre la pantalla para visualizar el registro seleccionado.
+     * @param record - Registro a abrir.
+     */
+    public openRecord(record: any): void {
+        if (this.service) {
+            let id: number = this.recoverRecordId(record);
+            this.service.openRecord(id);
+        }
+        else {
+            console.error('[openRecord] no se puede abrir el registro, porque no hay servicio.');
+        }
+    }
+
+    /**
+     * @name updateRecord
+     * @description Abre la pantalla para actualizar el elemento seleccionado.
+     * @param record - Registro a actualizar.
+     */
+    public updateRecord(record: any): void {
+        if (this.service) {
+            let id: number = this.recoverRecordId(record);
+            this.service.openUpdateView(id);
+        }
+        else {
+            console.error('[updateRecord] no se puede actualizar el registro, porque no hay servicio.');
+        }
+    }
+
+    /**
+     * @name deleteRecord
+     * @description Elimina el registro seleccionado.
+     * @param record - Registro a eliminar.
+     */
+    public deleteRecord(record: any): void {
+        if (this.service) {
+            let id: number = this.recoverRecordId(record);
+            this.service.deleteRecord(id);
+        }
+        else {
+            console.error('[deleteRecord] no se puede eliminar el registro, porque no hay servicio.');
+        }
+    }
+
+    /**
+     * @name recoverRecordId
+     * @description Recupera el identificador del registro proporcionado.
+     * @param record - Registro a buscar su identificador.
+     * @returns Retorna el identificador del registro o una excepción.
+     */
+    private recoverRecordId(record: any): number {
+        let field: any = record.find((x: any) => x.code === 'id');
+
+        if (field) return field.value;
+        else throw new Error('[recoverRecordId] no se puede eliminar el registro, porque no se encuentra su identificador.');
     }
 
     /**

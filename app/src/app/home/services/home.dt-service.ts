@@ -88,13 +88,13 @@ export class HomeDtService implements DataTableService {
                     update = true;
 
                     if (filter.isRange) {
-                        record = result.filter((x: any) => x.find((y: any) => y.code === filter.code && ( (y.value >= filter.from && y.value <= filter.to) || (y.type === 'datetime' && y.value >= new Date(filter.from) && y.value <= new Date(filter.to)) )));
+                        record = result.filter((x: any) => x.find((y: any) => y.code === filter.code && ((y.value >= filter.from && y.value <= filter.to) || (y.type === 'datetime' && y.value >= new Date(filter.from) && y.value <= new Date(filter.to)))));
                         record.forEach((element: any) => {
                             aux.push(element);
                         });
                     }
                     else {
-                        record = result.find((x: any) => x.find((y: any) => y.code === filter.code && ( (y.value == filter.value) || (y.type === 'datetime' && y.value >= new Date(filter.value) && y.value.setDate(y.value.getDate() - 1) <= new Date(filter.value)) )));
+                        record = result.find((x: any) => x.find((y: any) => y.code === filter.code && ((y.value == filter.value) || (y.type === 'datetime' && y.value >= new Date(filter.value) && y.value.setDate(y.value.getDate() - 1) <= new Date(filter.value)))));
                         aux.push(record);
                     }
                 }
@@ -131,7 +131,15 @@ export class HomeDtService implements DataTableService {
         totalRecords = result.length;
 
         return {
-            data: result.slice(offset, offset + limit),
+            data: {
+                records: result.slice(offset, offset + limit),
+                actions: {
+                    create: true,
+                    delete: true,
+                    update: true,
+                    view: true
+                }
+            },
             totalPages,
             totalRecords
         };
@@ -272,6 +280,7 @@ export class HomeDtService implements DataTableService {
      * @description Abre la pantalla para crear un registro.
      */
     public createRecord(): void {
+        console.log('Crear nuevo registro.');
         throw new Error('Method not implemented.');
     }
 
@@ -281,6 +290,7 @@ export class HomeDtService implements DataTableService {
      * @param id - Identificador del registro a visualizar.
      */
     public openRecord(id: number): void {
+        console.log(`Abrir registro '${id}'.`);
         throw new Error('Method not implemented.');
     }
 
@@ -290,6 +300,7 @@ export class HomeDtService implements DataTableService {
      * @param id - Identificador del registro a actualizar.
      */
     public openUpdateView(id: number): void {
+        console.log(`Actualizar registro '${id}'.`);
         throw new Error('Method not implemented.');
     }
 
@@ -299,6 +310,7 @@ export class HomeDtService implements DataTableService {
      * @param id - Identificador del registro a borrar.
      */
     public deleteRecord(id: number): Observable<any> {
+        console.log(`Eliminar registro '${id}'.`);
         throw new Error('Method not implemented.');
     }
 }
